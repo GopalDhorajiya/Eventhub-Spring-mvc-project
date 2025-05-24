@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Home - EventHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            color: #8a2be2;
+            font-weight: bold;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-purple {
+            background-color: #8a2be2;
+            color: white;
+        }
+
+        .btn-purple:hover {
+            background-color: #6f1bd1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-purple" th:href="@{/api/home}">EventHub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/api/yourevent}">Your Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/api/memberofevent}">Participating Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/api/yourteams}">Your Teams</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/api/teammembers}">Team Members</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/api/profile(user_id=${session.user_id})}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" th:href="@{/api/logout}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mt-5">
+        <h2 class="fw-bold">Discover Events</h2>
+        <p>Find and join amazing events around you</p>
+
+ 
+        <!-- Team Member Section -->
+        <div class="container mt-5">
+            <h2 class="fw-bold mb-4">Teams You're a Member Of</h2>
+
+            <div th:if="${user.teams.size() > 0}">
+                <div class="row g-4">
+                    <div class="col-md-4" th:each="t : ${user.teams}">
+                        <div class="card shadow-sm p-3">
+                            <h5 class="card-title text-center mb-3" th:text="${t.team_name}">Team Name</h5>
+                            <ul class="list-unstyled text-center">
+                                <li><strong>Event:</strong> <span th:text="${t.event.event_name}"></span></li>
+                                <li><strong>Date:</strong> <span th:text="${#dates.format(t.event.event_date, 'dd MMM yyyy')}"></span></li>
+                                <li><strong>Leader:</strong> <span th:text="${t.team_leader_id.user_name}"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${user.teams.size() == 0}" class="text-center mt-5">
+                <h5 class="text-muted">You are not a member of any team yet.</h5>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

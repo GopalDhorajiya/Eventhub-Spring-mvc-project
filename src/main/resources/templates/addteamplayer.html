@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Member</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Add Member to Team</h2>
+
+    <!-- Event Details -->
+    <h3>Event: <span th:text="${team.team_name}"></span></h3>
+
+	<form th:action="@{/api/saveteamplayer}" method="POST">
+	    <label for="user_id">Select User:</label>
+	    <select id="user_id" name="user_id" required>
+	        <option value="" disabled selected>Select a user</option>
+	        <option th:each="u : ${users}" th:value="${u.user_id}" th:text="${u.user_name}"></option>
+	    </select>
+
+	    <!-- Hidden input for event ID -->
+	    <input type="hidden" name="team_id" th:value="${team.team_id}" />
+
+	    <button type="submit">Add Member</button>
+	</form>
+
+
+
+    
+
+    <br>
+    <a href="/api/home">Back to Home</a>
+
+</body>
+</html>

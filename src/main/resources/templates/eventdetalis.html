@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Event Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="mb-3">Event Details</h2>
+        <hr>
+
+        <p><strong>Event Name:</strong> <span th:text="${event.event_name}"></span></p>
+        <p><strong>Description:</strong> <span th:text="${event.description}"></span></p>
+        <p><strong>Location:</strong> <span th:text="${event.location}"></span></p>
+        <p><strong>Date:</strong> <span th:text="${#dates.format(event.event_date, 'dd MMM yyyy')}"></span></p>
+        <p><strong>Fees:</strong> ₹<span th:text="${event.fees}"></span></p>
+        <p><strong>Min Team Size:</strong> <span th:text="${event.minsize}"></span></p>
+        <p><strong>Max Team Size:</strong> <span th:text="${event.maxsize}"></span></p>
+        <p><strong>Max Teams Allowed:</strong> <span th:text="${event.max_teams}"></span></p>
+
+        <h4 class="mt-4">Organizer</h4>
+        <p th:text="${event.eventHead.user_name}"></p>
+
+        <h4 class="mt-4">Teams</h4>
+        <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                th:each="team : ${event.teams}">
+                <span>
+                    <strong th:text="${team.team_name}"></strong>
+                    - Leader: <span th:text="${team.team_leader_id.user_name}"></span>
+                </span>
+            </li>
+        </ul>
+
+        <!-- Participation Section -->
+        <div th:if="${!isParticipated}">
+            <form th:action="@{/api/addteam}" method="post" class="d-flex flex-column gap-2">
+                <input type="hidden" name="event_id" th:value="${event.event_id}" />
+                <button type="submit" class="btn btn-primary">Participate in this Event</button>
+            </form>
+        </div>
+        <div th:if="${isParticipated}">
+            <p class="text-success mt-3">✅ You have already joined this event!</p>
+        </div>
+
+        <a th:href="@{/api/home}" class="btn btn-secondary mt-4">Back to Home</a>
+    </div>
+</div>
+</body>
+</html>

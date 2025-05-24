@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Team</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+    <div class="container">
+        <h2 class="mb-4">Update Team</h2>
+        <form th:action="@{/api/updateteam}" method="post" th:object="${team}">
+            <input type="hidden" th:field="*{team_id}" />
+
+            <div class="mb-3">
+                <label for="teamName" class="form-label">Team Name</label>
+                <input type="text" class="form-control" id="teamName" th:field="*{team_name}" required>
+            </div>
+
+            <h5>Current Players</h5>
+            <ul class="list-group mb-3">
+                <li th:each="p : ${team.players}" class="list-group-item d-flex justify-content-between align-items-center">
+                    <span th:text="${p.user_name}"></span>
+                    <a th:href="@{'/api/removeteammember?team_id=' + ${team.team_id} + '&user_id=' + ${p.user_id}}" class="btn btn-sm btn-danger">Remove</a>
+                </li>
+            </ul>
+
+            <h5>Add Players</h5>
+            <div class="mb-3">
+                <th:block th:each="u : ${availableUsers}">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="selectedPlayers" th:value="${u.user_id}">
+                        <label class="form-check-label" th:text="${u.user_name}"></label>
+                    </div>
+                </th:block>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Team</button>
+        </form>
+    </div>
+</body>
+</html>

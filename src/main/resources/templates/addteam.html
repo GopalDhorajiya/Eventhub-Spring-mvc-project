@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Team</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function validateForm() {
+            let minSize = parseInt(document.getElementById("minsize").value);
+            let maxSize = parseInt(document.getElementById("maxsize").value);
+            let checkboxes = document.querySelectorAll('input[name="selectedPlayers"]:checked');
+
+            if (checkboxes.length < minSize) {
+                alert("Please select at least " + minSize + " players.");
+                return false;
+            }
+            if (checkboxes.length > maxSize) {
+                alert("You can select at most " + maxSize + " players.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body class="container mt-4">
+    <h2 class="mb-3">Create Team</h2>
+
+    <form th:action="@{/api/saveteam}" method="post" th:object="${team}" onsubmit="return validateForm()">
+        <input type="hidden" th:field="*{team_id}" />
+        <input type="hidden" th:field="*{team_leader_id}" />
+        <input type="hidden" th:field="*{event}" />
+        <input type="hidden" id="minsize" th:value="${minsize}" />
+        <input type="hidden" id="maxsize" th:value="${maxsize}" />
+
+        <div class="mb-3">
+            <label class="form-label">Team Name:</label>
+            <input type="text" th:field="*{team_name}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <h5>Select Players</h5>
+            <p>(Min: <span th:text="${minsize}"></span>, Max: <span th:text="${maxsize}"></span>)</p>
+            <div class="form-check" th:each="player : ${users}">
+                <input class="form-check-input" type="checkbox" name="selectedPlayers" th:value="${player.user_id}" />
+                <label class="form-check-label" th:text="${player.user_name}"></label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Team</button>
+    </form>
+</body>
+</html>

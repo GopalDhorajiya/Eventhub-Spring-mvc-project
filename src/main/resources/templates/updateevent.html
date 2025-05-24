@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Event</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <h2 class="mb-4">Update Event</h2>
+
+    <form th:action="@{/api/updateevent}" method="post" th:object="${event}" class="mb-5">
+        <input type="hidden" th:field="*{event_id}" />
+        <div class="row mb-3">
+            <div class="col">
+                <label>Event Name</label>
+				<input type="hidden" th:field = "*{eventHead}">
+                <input type="text" th:field="*{event_name}" class="form-control" required />
+            </div>
+            <div class="col">
+                <label>Location</label>
+                <input type="text" th:field="*{location}" class="form-control" required />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label>Date</label>
+                <input type="date" th:field="*{event_date}" class="form-control"
+                       th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required />
+            </div>
+            <div class="col">
+                <label>Fees</label>
+                <input type="number" th:field="*{fees}" class="form-control" required />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label>Min Team Size</label>
+                <input type="number" th:field="*{minsize}" class="form-control" required />
+            </div>
+            <div class="col">
+                <label>Max Team Size</label>
+                <input type="number" th:field="*{maxsize}" class="form-control" required />
+            </div>
+            <div class="col">
+                <label>Max Teams</label>
+                <input type="number" th:field="*{max_teams}" class="form-control" required />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Event</button>
+    </form>
+
+    <h3>Current Members</h3>
+    <div class="row">
+        <div class="col-md-3 mb-2" th:each="member : ${currentMembers}">
+            <div class="border p-2 d-flex justify-content-between align-items-center">
+                <span th:text="${member.user_name}"></span>
+                <form th:action="@{/api/deletemember}" method="post">
+                    <input type="hidden" name="event_id" th:value="${event.event_id}" />
+                    <input type="hidden" name="user_id" th:value="${member.user_id}" />
+                    <button class="btn btn-sm btn-danger">Remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mt-4">Add New Members</h3>
+    <form th:action="@{/api/savemember}" method="post">
+        <input type="hidden" name="event_id" th:value="${event.event_id}" />
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-check" th:each="user : ${availableUsers}">
+                    <input class="form-check-input" type="checkbox" name="user_id" th:value="${user.user_id}" />
+                    <label class="form-check-label" th:text="${user.user_name}"></label>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-success">Add Selected Members</button>
+    </form>
+</body>
+</html>

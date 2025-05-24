@@ -1,0 +1,43 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">EventHub</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/api/home}">Browse Events</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/api/organizingevent}">Organized Events</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/api/memberofevent}">Participating Events</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/api/yourteams}">My Teams</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/api/teammembers}">Team Members</a>
+                </li>
+
+				<li class="nav-item">
+				    <a class="nav-link" th:href="@{/api/profile(user_id=${session.user_id})}">My Profile</a>
+				</li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-danger" th:href="@{/api/logout}">Logout</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
